@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/15 14:33:32 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/16 18:58:00 by nibenoit         ###   ########.fr       */
+/*   Created: 2023/02/16 17:43:06 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/02/16 17:55:45 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	msg(char *err)
+void	free_parent(t_pipex *pipex)
 {
-	write(2, err, ft_strlen(err));
-	return (1);
-}
+	int	i;
 
-void	msg_error(char *err)
-{
-	perror(err);
-	exit (1);
+	i = 0;
+	close(pipex->infile);
+	close(pipex->outfile);
+	while (pipex->cmd_paths[i])
+	{
+		free(pipex->cmd_paths[i]);
+		i++;
+	}
+	free(pipex->cmd_paths);
 }

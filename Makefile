@@ -7,7 +7,8 @@ LIBFT = $(FTPATH)libft.a
 ######################################################################
 SRCS = main.c\
 		error.c\
-		childs.c
+		childs.c\
+		free.c
 OBJS = $(addprefix $(OBJDIR),$(SRCS:.c=.o))
 #####################################################################
 CC = gcc
