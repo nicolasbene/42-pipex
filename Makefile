@@ -1,42 +1,52 @@
-SRCDIR = src/
-OBJDIR = bin/
-INCDIR = include/
-FTPATH = libft/
-FTINC = $(FTPATH)include/
-LIBFT = $(FTPATH)libft.a
-######################################################################
-SRCS = main.c\
-		error.c\
-		childs.c\
-		free.c
-OBJS = $(addprefix $(OBJDIR),$(SRCS:.c=.o))
-#####################################################################
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
-LINK = -lft
-INCPATH = -I$(INCDIR) -I$(FTINC)
-LIBPATH = -L$(FTPATH)
-NAME = pipex
-######################################################################
-all: $(NAME)
+#SETUP
+NAME		=	pipex
+CC			=	gcc
+FLAGS		=	-Wall -Wextra -Werror
+RM			=	rm -rf
 
-$(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(OBJS) $(LIBPATH) $(LINK) -o $(NAME)
+#FILES AND PATH
+HEADER_SRCS	=	pipex.h pipex_bonus.h
+HEADER_DIR	=	includes/
+HEADER		=	$(addprefix $(HEADER_DIR), $(HEADER_SRCS))
 
-$(OBJDIR)%.o: $(SRCDIR)%.c
-	$(CC) -c $(CFLAGS) $(INCPATH) $< -o $@
+MPATH_SRCS	=	main.c childs.c error.c free.c
+MPATH_DIR	=	mandatory/
+MPATH		=	$(addprefix $(MPATH_DIR), $(MPATH_SRCS))
+OBJ_M		=	$(MPATH:.c=.o)
 
-$(LIBFT):
-	make -C $(FTPATH)
+FUNC_SRCS	=	ft_strncmp.c ft_split.c ft_strjoin.c\
+					ft_memcpy.c ft_strlcpy.c ft_strlen.c
+FUNC_DIR	=	functions/
+FUNC 		=	$(addprefix $(FUNC_DIR), $(FUNC_SRCS))\
+				gnl/get_next_line_utils.c gnl/get_next_line.c
+OBJ_F		=	$(FUNC:.c=.o)
+
+#COMMANDS
+%.o: %.c $(HEADER) Makefile
+				@${CC} ${FLAGS} -c $< -o $@
+
+$(NAME):		$(OBJ_F) $(OBJ_M)
+				@$(CC) $(OBJ_F) $(OBJ_M) -o $(NAME)
+				@echo "$(GREEN)$(NAME) created!$(DEFAULT)"
+
+all:			$(NAME)
 
 clean:
-	rm -rf $(OBJS)
+				@$(RM) $(OBJ_M)
+				@$(RM) $(OBJ_F)
+				@$(RM) $(OBJ_B)
+				@echo "$(YELLOW)object files deleted!$(DEFAULT)"
 
-fclean: clean
-	make fclean -C $(FTPATH)
-	rm -f $(NAME)
-	rm -f checker
+fclean:			clean
+				@$(RM) $(NAME)
+				@echo "$(RED)all deleted!$(DEFAULT)"
 
-re: fclean $(NAME)
+re:				fclean all
 
-.PHONY: all libft clean fclean re
+.PHONY:		all clean fclean bonus re
+
+#COLORS
+RED = \033[1;31m
+GREEN = \033[1;32m
+YELLOW = \033[1;33m
+DEFAULT = \033[0m
