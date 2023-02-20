@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   error_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/15 14:33:32 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 16:53:21 by nibenoit         ###   ########.fr       */
+/*   Created: 2023/02/20 15:57:16 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/02/20 16:04:30 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipex_bonus.h"
 
 int	msg(char *err)
 {
@@ -18,16 +18,9 @@ int	msg(char *err)
 	return (1);
 }
 
-void	msg_error(char *err, t_pipex *pipex)
+void	msg_error(char *err, t_ppxb *pipex)
 {
 	free(pipex);
 	perror(err);
 	exit (1);
-}
-
-void	free_error_cmd(t_pipex *pipex)
-{
-	free_child(pipex);
-	msg_error(ERR_CMD, pipex);
-	exit(1);
 }

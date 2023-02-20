@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:44:15 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/17 15:15:59 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/02/20 10:44:43 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,9 @@ void	first_child(t_pipex *pipex, char *argv[], char *envp[])
 	pipex->cmd_arg_str = ft_split(argv[2], ' ');
 	pipex->cmd_str = get_cmd(pipex->cmd_paths, pipex->cmd_arg_str[0]);
 	if (!pipex->cmd_str)
-	{
-		free_child(pipex);
-		msg(ERR_CMD);
-		exit(1);
-	}
-	execve(pipex->cmd_str, pipex->cmd_arg_str, envp);
+		free_error_cmd(pipex);
+	if (!execve(pipex->cmd_str, pipex->cmd_arg_str, envp))
+		free_error_cmd(pipex);
 }
 
 void	second_child(t_pipex *pipex, char *argv[], char *envp[])
@@ -54,10 +51,7 @@ void	second_child(t_pipex *pipex, char *argv[], char *envp[])
 	pipex->cmd_arg_str = ft_split(argv[3], ' ');
 	pipex->cmd_str = get_cmd(pipex->cmd_paths, pipex->cmd_arg_str[0]);
 	if (!pipex->cmd_str)
-	{
-		free_child(pipex);
-		msg(ERR_CMD);
-		exit(1);
-	}
-	execve(pipex->cmd_str, pipex->cmd_arg_str, envp);
+		free_error_cmd(pipex);
+	if (!execve(pipex->cmd_str, pipex->cmd_arg_str, envp))
+		free_error_cmd(pipex);
 }

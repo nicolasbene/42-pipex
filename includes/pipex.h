@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:03:09 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/17 15:12:50 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/02/20 15:50:10 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,15 @@
 /* to get_next_line */
 # include "../gnl/get_next_line.h"
 
-# define ERR_INFILE "Infile Erro"
+# define ERR_INFILE "Infile Error"
 # define ERR_OUTFILE "Outfile Error"
-# define ERR_INPUT "Input Error"
+# define ERR_INPUT "Invalid number of arguments.\n"
+# define ERR_PATH_UNSET "Unset Path Error\n"
 # define ERR_PIPE "Pipe Error"
 # define ERR_FORK "Fork Error"
 # define ERR_CMD "Command not found"
+# define ERR_EXECVE "Execve Error"
+# define ERR_MALLOC "Malloc Error"
 
 typedef struct s_pipex
 {
@@ -47,19 +50,20 @@ typedef struct s_pipex
 	int		tube[2];
 	int		infile;
 	int		outfile;
-	char	*path_env;
+	char	*env_path;
 	char	**cmd_paths;
 	char	**cmd_arg_str;
 	char	*cmd_str;
-}t_pipex;
+}	t_pipex;
 
 /* childs.c */
 void	first_child(t_pipex *pipex, char *argv[], char *envp[]);
 void	second_child(t_pipex *pipex, char *argv[], char *envp[]);
 
 /* error.c */
-void	msg_error(char *err);
 int		msg(char *err);
+void	msg_error(char *err, t_pipex *pipex);
+void	free_error_cmd(t_pipex *pipex);
 
 /* free.c */
 void	free_parent(t_pipex *pipex);
@@ -72,5 +76,6 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t size);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 size_t	ft_strlen(const char *s);
+char	*ft_strnstr(const char *str, const char *to_find, size_t len);
 
 #endif

@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/15 14:33:32 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 16:53:21 by nibenoit         ###   ########.fr       */
+/*   Created: 2023/02/20 11:26:44 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/02/20 18:42:52 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipex_bonus.h"
 
-int	msg(char *err)
+int	main(int argc, char *argv[], char *envp[])
 {
-	write(2, err, ft_strlen(err));
-	return (1);
-}
+	t_ppxb	*pipex;
 
-void	msg_error(char *err, t_pipex *pipex)
-{
+	pipex = malloc(sizeof(t_ppxb));
+	if (!pipex)
+		msg_error(ERR_MALLOC, pipex);
+	if (argc < args_in(argv[1], pipex))
+		msg_error(ERR_INPUT, pipex);
+	if (!find_path_set(envp, "PATH"))
+		msg_error(ERR_PATH_UNSET, pipex);
+	get_infile(argv, pipex);
+	get_outfile(argv[argc - 1], pipex);
+
 	free(pipex);
-	perror(err);
-	exit (1);
-}
-
-void	free_error_cmd(t_pipex *pipex)
-{
-	free_child(pipex);
-	msg_error(ERR_CMD, pipex);
-	exit(1);
+	return (0);
 }

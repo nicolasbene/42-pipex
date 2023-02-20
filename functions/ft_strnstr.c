@@ -1,43 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 17:43:06 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 14:44:51 by nibenoit         ###   ########.fr       */
+/*   Created: 2022/11/09 15:42:07 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/02/20 11:41:51 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	free_parent(t_pipex *pipex)
+char	*ft_strnstr(const char *str, const char *to_find, size_t len)
 {
-	int	i;
+	unsigned int	i;
+	unsigned int	a;
 
 	i = 0;
-	close(pipex->infile);
-	close(pipex->outfile);
-	while (pipex->cmd_paths[i])
+	if (ft_strlen(to_find) == 0)
+		return ((char *)str);
+	if (!str && len == 0)
+		return (NULL);
+	while (str[i] && i < len)
 	{
-		free(pipex->cmd_paths[i]);
+		a = 0;
+		while (str[i + a] == to_find[a] && (i + a) < len)
+		{
+			if (to_find[a + 1] == '\0')
+				return ((char *)(str + i));
+			a++;
+		}
 		i++;
 	}
-	free(pipex->cmd_paths);
-}
-
-void	free_child(t_pipex *pipex)
-{
-	int	i;
-
-	i = 0;
-	while (pipex->cmd_arg_str[i])
-	{
-		free(pipex->cmd_arg_str[i]);
-		i++;
-	}
-	free(pipex->cmd_arg_str);
-	free(pipex->cmd_str);
-	free_parent(pipex);
+	return (NULL);
 }
