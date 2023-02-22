@@ -15,14 +15,14 @@ MPATH		=	$(addprefix $(MPATH_DIR), $(MPATH_SRCS))
 OBJ_M		=	$(MPATH:.c=.o)
 
 BPATH_SRCS	=	main_bonus.c error_bonus.c here_doc_bonus.c\
-				files_bonus.c
+				files_bonus.c free_bonus.c child_bonus.c
 BPATH_DIR	=	bonus/
 BPATH		=	$(addprefix $(BPATH_DIR), $(BPATH_SRCS))
 OBJ_B		=	$(BPATH:.c=.o)
 
 FUNC_SRCS	=	ft_strncmp.c ft_split.c ft_strjoin.c\
 					ft_memcpy.c ft_strlcpy.c ft_strlen.c\
-					ft_strnstr.c
+					ft_strnstr.c ft_putstr_fd.c
 FUNC_DIR	=	functions/
 FUNC 		=	$(addprefix $(FUNC_DIR), $(FUNC_SRCS))\
 				gnl/get_next_line_utils.c gnl/get_next_line.c

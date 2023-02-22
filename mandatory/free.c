@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:43:06 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 14:44:51 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:57:35 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,11 @@ void	free_child(t_pipex *pipex)
 	free(pipex->cmd_arg_str);
 	free(pipex->cmd_str);
 	free_parent(pipex);
+}
+
+void	free_error_cmd(t_pipex *pipex)
+{
+	free_child(pipex);
+	msg_error(ERR_CMD, pipex);
+	exit(1);
 }

@@ -6,26 +6,88 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 11:26:44 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 18:42:52 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/02/22 18:22:54 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex_bonus.h"
 
-int	main(int argc, char *argv[], char *envp[])
+void	child_process(char *cmd, char **envp, int *fileprev)
 {
-	t_ppxb	*pipex;
+	pid_t	pid;
+	int		p[2];
 
-	pipex = malloc(sizeof(t_ppxb));
-	if (!pipex)
-		msg_error(ERR_MALLOC, pipex);
-	if (argc < args_in(argv[1], pipex))
-		msg_error(ERR_INPUT, pipex);
-	if (!find_path_set(envp, "PATH"))
-		msg_error(ERR_PATH_UNSET, pipex);
-	get_infile(argv, pipex);
-	get_outfile(argv[argc - 1], pipex);
+	if (pipe(p) == -1)
+		msg_error(4);
+	pid = fork();
+	if (pid == -1)
+		msg_error(5);
+	if (pid == 0)
+	{
+		close(p[READ_END]);
+		if (dup2(*fileprev, STDIN_FILENO) < 0)
+			msg_error(100);
+		close(*fileprev);
+		printf("child process ok\n");
+		if (dup2(p[WRITE_END], STDOUT_FILENO) < 0)
+			msg_error(200);
+		ft_execute(cmd, envp);
+	}
+	close(*fileprev);
+	*fileprev = p[READ_END];
+	close(p[WRITE_END]);
+}
 
-	free(pipex);
+void	last_child_process(char *cmd, char **envp, int *fileprev, int fileout)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		msg_error(8);
+	if (pid == 0)
+	{
+		if (dup2(*fileprev, STDIN_FILENO) < 0)
+			msg_error(22);
+		close(*fileprev);
+		if (dup2(fileout, STDOUT_FILENO) < 0)
+			msg_error(23);
+		close(fileout);
+		ft_execute(cmd, envp);
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	int	i;
+	int	filein;
+	int	fileout;
+	int	fileprev;
+
+	if (argc >= 5)
+	{
+		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		{
+			i = 3;
+			fileout = open_file(argv[argc - 1], 0);
+			filein = here_doc(argv[2]);
+		}
+		else
+		{
+			i = 2;
+			fileout = open_file(argv[argc - 1], 1);
+			filein = open_file(argv[1], 2);
+			printf("out : %d\nin : %d\n", fileout, filein);
+		}
+		fileprev = filein;
+		while (i < argc - 2)
+		{
+			child_process(argv[i], envp, &fileprev);
+			printf("%d\n", i);
+			i++;
+		}
+		last_child_process(argv[argc - 2], envp, &fileprev, fileout);
+	}
+	waitpid(-1, NULL, 0);
 	return (0);
 }

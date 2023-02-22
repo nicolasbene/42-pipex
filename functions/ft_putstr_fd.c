@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_bonus.c                                      :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 15:57:16 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/22 14:57:58 by nibenoit         ###   ########.fr       */
+/*   Created: 2022/11/10 18:42:16 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/02/22 12:25:08 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex_bonus.h"
+#include "../includes/pipex.h"
 
-void	arg_error(void)
+void	ft_putstr_fd(char *s, int fd)
 {
-	ft_putstr_fd("Invalid arguments", 2);
-	exit(EXIT_SUCCESS);
-}
-
-void	msg_error(int i)
-{
-	perror("Error");
-	printf("%d\n", i);
-	exit(EXIT_FAILURE);
+	if (s)
+		write(fd, s, ft_strlen(s));
 }

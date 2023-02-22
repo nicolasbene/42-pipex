@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 11:53:20 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 18:42:38 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/02/22 14:52:47 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,18 @@ int	find_path_set(char **envp, char *path)
 	return (0);
 }
 
-void	get_infile(char **argv, t_ppxb *pipex)
+int	open_file(char *argv, int i)
 {
-	if (!ft_strncmp("here_doc", argv[1], 9))
-		here_doc(argv[2], pipex);
-	else
-	{
-		pipex->infile = open(argv[1], O_RDONLY);
-		if (pipex->infile < 0)
-			msg_error(ERR_INFILE, pipex);
-	}
-}
+	int	file;
 
-void	get_outfile(char *argv, t_ppxb *pipex)
-{
-	if (pipex->here_doc)
-		pipex->outfile = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		pipex->outfile = open(argv, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (pipex->outfile < 0)
-		msg_error(ERR_OUTFILE, pipex);
+	file = 0;
+	if (i == 0)
+		file = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (i == 1)
+		file = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (i == 2)
+		file = open(argv, O_RDONLY, 0644);
+	if (file == -1)
+		msg_error(1);
+	return (file);
 }
