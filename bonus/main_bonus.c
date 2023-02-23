@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 11:26:44 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/22 18:22:54 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:47:05 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	child_process(char *cmd, char **envp, int *fileprev)
 		if (dup2(*fileprev, STDIN_FILENO) < 0)
 			msg_error(100);
 		close(*fileprev);
-		printf("child process ok\n");
 		if (dup2(p[WRITE_END], STDOUT_FILENO) < 0)
 			msg_error(200);
 		ft_execute(cmd, envp);
@@ -77,13 +76,11 @@ int	main(int argc, char **argv, char **envp)
 			i = 2;
 			fileout = open_file(argv[argc - 1], 1);
 			filein = open_file(argv[1], 2);
-			printf("out : %d\nin : %d\n", fileout, filein);
 		}
 		fileprev = filein;
 		while (i < argc - 2)
 		{
 			child_process(argv[i], envp, &fileprev);
-			printf("%d\n", i);
 			i++;
 		}
 		last_child_process(argv[argc - 2], envp, &fileprev, fileout);

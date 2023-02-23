@@ -1,13 +1,10 @@
-/goinfre/nibenoit/miniconda3/bin
-/mnt/nfs/homes/nibenoit/bin
-/goinfre/nibenoit/miniconda3/bin
-/mnt/nfs/homes/nibenoit/bin
-/usr/local/sbin
-/usr/local/bin
-/usr/sbin
-/usr/bin
-/sbin
-/bin
-/usr/games
-/usr/local/games
-/snap/bin
+      0       0       0 /usr/local/sbin
+      0       0       0 /usr/local/bin
+      0       0       0 /usr/sbin
+      0       0       0 /usr/bin
+      0       0       0 /sbin
+      0       0       0 /bin
+      0       0       0 /usr/games
+      0       0       0 /usr/local/games
+      0       0       0 /snap/bin
+      0       0       0 total
