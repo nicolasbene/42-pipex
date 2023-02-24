@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:04:15 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/23 17:17:03 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/02/24 14:33:19 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ft_execute(char *argv, char **envp)
 	cmd_paths = ft_split(env_path, ':');
 	cmd_tab = ft_split(argv, ' ');
 	int i = 0;
-		dprintf(2, "\n------------cmd_path---------------\n");
+	dprintf(2, "\n------------cmd_path---------------\n");
 	while (cmd_paths[i])
 	{
 		dprintf(2, "cmd_path : %s\n", cmd_paths[i]);
@@ -60,7 +60,7 @@ void	ft_execute(char *argv, char **envp)
 	dprintf(2, "\ncmd_str : %s\n", cmd_str);
 	if (!cmd_str)
 		exit(1);
-	if (execve(cmd_str, cmd_paths, envp) < 0)
-		msg_error(6);
 	dprintf(2, "lalalallal\n\n");
+	if (execve(cmd_str, cmd_tab, envp) < 0)
+		msg_error(6);
 }
