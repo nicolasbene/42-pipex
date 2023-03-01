@@ -1,5 +1,6 @@
 #SETUP
 NAME		=	pipex
+NAME_BONUS	=	pipex_bonus
 CC			=	gcc
 FLAGS		=	-Wall -Wextra -Werror
 RM			=	rm -rf
@@ -9,20 +10,23 @@ HEADER_SRCS	=	pipex.h pipex_bonus.h
 HEADER_DIR	=	includes/
 HEADER		=	$(addprefix $(HEADER_DIR), $(HEADER_SRCS))
 
-MPATH_SRCS	=	main.c childs.c error.c free.c
+MPATH_SRCS	=	main.c error.c error_close.c\
+				paths.c execute.c free.c\
+
 MPATH_DIR	=	mandatory/
 MPATH		=	$(addprefix $(MPATH_DIR), $(MPATH_SRCS))
 OBJ_M		=	$(MPATH:.c=.o)
 
 BPATH_SRCS	=	main_bonus.c error_bonus.c here_doc_bonus.c\
-				files_bonus.c free_bonus.c execute_bonus.c
+				paths_bonus.c execute_bonus.c free_bonus.c\
+				error_close_bonus.c
 BPATH_DIR	=	bonus/
 BPATH		=	$(addprefix $(BPATH_DIR), $(BPATH_SRCS))
 OBJ_B		=	$(BPATH:.c=.o)
 
 FUNC_SRCS	=	ft_strncmp.c ft_split.c ft_strjoin.c\
 					ft_memcpy.c ft_strlcpy.c ft_strlen.c\
-					ft_strnstr.c ft_putstr_fd.c
+					ft_strnstr.c ft_putstr_fd.c ft_strchr.c
 FUNC_DIR	=	functions/
 FUNC 		=	$(addprefix $(FUNC_DIR), $(FUNC_SRCS))\
 				gnl/get_next_line_utils.c gnl/get_next_line.c
@@ -39,8 +43,8 @@ $(NAME):		$(OBJ_F) $(OBJ_M)
 all:			$(NAME)
 
 bonus:			$(OBJ_F) $(OBJ_B)
-				@$(CC) $(OBJ_F) $(OBJ_B) -o $(NAME)
-				@echo "$(GREEN)bonus $(NAME) created!$(DEFAULT)"
+				@$(CC) $(OBJ_F) $(OBJ_B) -o $(NAME_BONUS)
+				@echo "$(GREEN)bonus $(NAME_BONUS) created!$(DEFAULT)"
 
 clean:
 				@$(RM) $(OBJ_M)
@@ -49,7 +53,7 @@ clean:
 				@echo "$(YELLOW)object files deleted!$(DEFAULT)"
 
 fclean:			clean
-				@$(RM) $(NAME)
+				@$(RM) $(NAME) $(NAME_BONUS)
 				@echo "$(RED)all deleted!$(DEFAULT)"
 
 re:				fclean all

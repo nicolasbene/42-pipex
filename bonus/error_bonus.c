@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:57:16 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/23 11:58:58 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/03/01 12:18:12 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ void	arg_error(void)
 	exit(EXIT_SUCCESS);
 }
 
-void	msg_error(int i)
+void	msg_error(void)
 {
 	perror("Error");
-	dprintf(2, "%d\n", i);
 	exit(EXIT_FAILURE);
 }

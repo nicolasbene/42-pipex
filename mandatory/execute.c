@@ -6,11 +6,11 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:04:15 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/03/01 11:45:18 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/03/01 12:20:56 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex_bonus.h"
+#include "../includes/pipex.h"
 
 char	*get_cmd(char **cmd_paths, char **cmd_tab)
 {

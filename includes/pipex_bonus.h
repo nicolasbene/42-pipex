@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 10:45:28 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/22 17:53:50 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:37:40 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,38 @@
 /* to get_next_line */
 # include "../gnl/get_next_line.h"
 
-#define STDIN_FILENO 0
-#define STDOUT_FILENO 1
+# define STDIN_FILENO 0
+# define STDOUT_FILENO 1
 
 /* Variables for the pipes */
 # define READ_END	0
 # define WRITE_END	1
 
-/* files_bonus.c */
+/* paths_bonus.c */
+char	*find_path(char **envp);
 int		find_path_set(char **envp, char *path);
-int		open_file(char *argv, int i);
-void	dup_close(int src, int dst);
+int		ft_nopath(char **cmd_tab, char **envp, int *fileout);
 
 /* here_doc_bonus.c */
-int		here_doc(char *limiter);
+int		here_doc(char *limiter, int *fileout);
 
-/* child_bonus.c */
-void	ft_execute(char *argv, char **envp);
-char	*find_path(char **envp);
+/* execute_bonus.c */
+void	ft_execute(char *argv, char **envp, int *fileout);
+char	*get_cmd(char **cmd_paths, char **cmd_tab);
 
 /* error_bonus.c */
-void	msg_error(int i);
+void	msg_error(void);
+void	msg_error_closefd_1(int *file);
+void	msg_error_closefd_2(int *file, int *file1);
+void	msg_error_closefd_3(int *file, int *file1, int *file2);
+void	msg_error_closefd_4(int *file, int *file1, int *file2, int *file3);
 void	arg_error(void);
+
+/* free_bonus.c */
+void	ft_free_cmd_error(char **cmd_paths, char **cmd_tab);
+void	ft_free_tab(char **tab);
+
+/* close_bonus.c */
 
 /* funcions */
 char	**ft_split(char const *s, char c);
@@ -65,5 +75,6 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 size_t	ft_strlen(const char *s);
 char	*ft_strnstr(const char *str, const char *to_find, size_t len);
 void	ft_putstr_fd(char *s, int fd);
+char	*ft_strchr(const char *str, int c);
 
 #endif

@@ -5,81 +5,91 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/15 13:01:03 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 15:50:55 by nibenoit         ###   ########.fr       */
+/*   Created: 2023/02/20 11:26:44 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/03/01 12:57:31 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-char	*find_path(char **envp)
+int	open_file(char *argv, int i)
 {
-	while (ft_strncmp("PATH", *envp, 4))
-		envp++;
-	return (*envp + 5);
+	int	file;
+
+	file = 0;
+	if (i == 1)
+		file = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (i == 2)
+		file = open(argv, O_RDONLY, 0644);
+	return (file);
 }
 
-int	find_path_set(char **envp, char *path)
+void	child_process(char *cmd, char **envp, int *fileprev, int *fileout)
+{
+	pid_t	pid;
+	int		p[2];
+
+	if (pipe(p) == -1)
+		msg_error_closefd_2(fileprev, fileout);
+	pid = fork();
+	if (pid == -1)
+		msg_error_closefd_4(fileprev, fileout, &p[0], &p[1]);
+	else if (pid == 0)
+	{
+		if (*fileprev < 0)
+			msg_error_closefd_3(fileout, &p[0], &p[1]);
+		close(p[READ_END]);
+		if (dup2(*fileprev, STDIN_FILENO) < 0)
+			msg_error_closefd_3(fileprev, fileout, &p[1]);
+		close(*fileprev);
+		if (dup2(p[WRITE_END], STDOUT_FILENO) < 0)
+			msg_error_closefd_2(fileout, &p[1]);
+		close(p[WRITE_END]);
+		ft_execute(cmd, envp, fileout);
+	}
+	close(*fileprev);
+	*fileprev = p[READ_END];
+	close(p[WRITE_END]);
+}
+
+void	last_child_process(char *cmd, char **envp, int *fileprev, int *fileout)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		msg_error_closefd_2(fileprev, fileout);
+	else if (pid == 0)
+	{
+		if (*fileout < 0)
+			msg_error_closefd_1(fileprev);
+		if (dup2(*fileprev, STDIN_FILENO) < 0)
+			msg_error_closefd_2(fileprev, fileout);
+		close(*fileprev);
+		if (dup2(*fileout, STDOUT_FILENO) < 0)
+			msg_error_closefd_1(fileout);
+		ft_execute(cmd, envp, fileout);
+	}
+	close(*fileprev);
+	close(*fileout);
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	int	i;
+	int	filein;
+	int	fileout;
 
-	i = 0;
-	while (envp[i])
+	if (argc == 5)
 	{
-		if (ft_strnstr(envp[i], path, 4))
-			return (1);
-		i++;
+		i = 2;
+		fileout = open_file(argv[argc - 1], 1);
+		filein = open_file(argv[1], 2);
+		while (i < argc - 2)
+			child_process(argv[i++], envp, &filein, &fileout);
+		last_child_process(argv[argc - 2], envp, &filein, &fileout);
 	}
-	return (0);
-}
-
-void	close_pipes(t_pipex *pipex)
-{
-	close(pipex->tube[0]);
-	close(pipex->tube[1]);
-}
-
-int	ft_pipex(t_pipex *pipex, char *argv[], char *envp[])
-{
-	if (pipe(pipex->tube) < 0)
-		msg_error(ERR_PIPE, pipex);
-	pipex->env_path = find_path(envp);
-	pipex->cmd_paths = ft_split(pipex->env_path, ':');
-	pipex->pid1 = fork();
-	if (pipex->pid1 == -1)
-		msg_error(ERR_FORK, pipex);
-	else if (pipex->pid1 == 0)
-		first_child(pipex, argv, envp);
-	pipex->pid2 = fork();
-	if (pipex->pid2 == -1)
-		msg_error(ERR_FORK, pipex);
-	else if (pipex->pid2 == 0)
-		second_child(pipex, argv, envp);
-	close_pipes(pipex);
-	waitpid(pipex->pid1, NULL, 0);
-	waitpid(pipex->pid2, NULL, 0);
-	free_parent(pipex);
-	free(pipex);
-	return (0);
-}
-
-int	main(int argc, char *argv[], char *envp[])
-{
-	t_pipex	*pipex;
-
-	if (argc != 5)
-		return (msg(ERR_INPUT));
-	if (!find_path_set(envp, "PATH"))
-		return (msg(ERR_PATH_UNSET));
-	pipex = malloc(sizeof(t_pipex));
-	if (!pipex)
-		return (msg(ERR_MALLOC));
-	pipex->infile = open(argv[1], O_RDONLY);
-	if (pipex->infile < 0)
-		msg_error(ERR_INFILE, pipex);
-	pipex->outfile = open(argv[4], O_TRUNC | O_CREAT | O_RDWR, 0644);
-	if (pipex->outfile < 0)
-		msg_error(ERR_OUTFILE, pipex);
-	ft_pipex(pipex, argv, envp);
+	while (wait(NULL) != -1)
+		;
 	return (0);
 }

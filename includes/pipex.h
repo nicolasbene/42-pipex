@@ -6,7 +6,7 @@
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:03:09 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/20 15:50:10 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:37:34 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,41 +33,35 @@
 /* to get_next_line */
 # include "../gnl/get_next_line.h"
 
-# define ERR_INFILE "Infile Error"
-# define ERR_OUTFILE "Outfile Error"
-# define ERR_INPUT "Invalid number of arguments.\n"
-# define ERR_PATH_UNSET "Unset Path Error\n"
-# define ERR_PIPE "Pipe Error"
-# define ERR_FORK "Fork Error"
-# define ERR_CMD "Command not found"
-# define ERR_EXECVE "Execve Error"
-# define ERR_MALLOC "Malloc Error"
+# define STDIN_FILENO 0
+# define STDOUT_FILENO 1
 
-typedef struct s_pipex
-{
-	pid_t	pid1;
-	pid_t	pid2;
-	int		tube[2];
-	int		infile;
-	int		outfile;
-	char	*env_path;
-	char	**cmd_paths;
-	char	**cmd_arg_str;
-	char	*cmd_str;
-}	t_pipex;
+/* Variables for the pipes */
+# define READ_END	0
+# define WRITE_END	1
 
-/* childs.c */
-void	first_child(t_pipex *pipex, char *argv[], char *envp[]);
-void	second_child(t_pipex *pipex, char *argv[], char *envp[]);
+/* paths_bonus.c */
+char	*find_path(char **envp);
+int		find_path_set(char **envp, char *path);
+int		ft_nopath(char **cmd_tab, char **envp, int *fileout);
 
-/* error.c */
-int		msg(char *err);
-void	msg_error(char *err, t_pipex *pipex);
-void	free_error_cmd(t_pipex *pipex);
+/* execute_bonus.c */
+void	ft_execute(char *argv, char **envp, int *fileout);
+char	*get_cmd(char **cmd_paths, char **cmd_tab);
 
-/* free.c */
-void	free_parent(t_pipex *pipex);
-void	free_child(t_pipex *pipex);
+/* error_bonus.c */
+void	msg_error(void);
+void	arg_error(void);
+
+/* free_bonus.c */
+void	ft_free_cmd_error(char **cmd_paths, char **cmd_tab);
+void	ft_free_tab(char **tab);
+
+/* error_close_bonus.c */
+void	msg_error_closefd_1(int *file);
+void	msg_error_closefd_2(int *file, int *file1);
+void	msg_error_closefd_3(int *file, int *file1, int *file2);
+void	msg_error_closefd_4(int *file, int *file1, int *file2, int *file3);
 
 /* funcions */
 char	**ft_split(char const *s, char c);
@@ -77,5 +71,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t size);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 size_t	ft_strlen(const char *s);
 char	*ft_strnstr(const char *str, const char *to_find, size_t len);
+void	ft_putstr_fd(char *s, int fd);
+char	*ft_strchr(const char *str, int c);
 
 #endif

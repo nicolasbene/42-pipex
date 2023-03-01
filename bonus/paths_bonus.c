@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   files_bonus.c                                      :+:      :+:    :+:   */
+/*   paths_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 11:53:20 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/22 14:52:47 by nibenoit         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:10:26 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*find_path(char **envp)
 {
-	while (ft_strncmp("PATH", *envp, 4))
+	while (ft_strncmp("PATH=", *envp, 5))
 		envp++;
 	return (*envp + 5);
 }
@@ -33,18 +33,24 @@ int	find_path_set(char **envp, char *path)
 	return (0);
 }
 
-int	open_file(char *argv, int i)
+int	ft_nopath(char **cmd_tab, char **envp, int *fileout)
 {
-	int	file;
-
-	file = 0;
-	if (i == 0)
-		file = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (i == 1)
-		file = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (i == 2)
-		file = open(argv, O_RDONLY, 0644);
-	if (file == -1)
-		msg_error(1);
-	return (file);
+	if (!find_path_set(envp, "PATH"))
+	{
+		if (ft_strchr(cmd_tab[0], '/'))
+		{
+			if (access(cmd_tab[0], F_OK) == 0)
+				return (1);
+		}
+		ft_free_tab(cmd_tab);
+		msg_error_closefd_1(fileout);
+	}
+	else if (ft_strchr(cmd_tab[0], '/'))
+	{
+		if (access(cmd_tab[0], F_OK) == 0)
+			return (1);
+		ft_free_tab(cmd_tab);
+		msg_error_closefd_1(fileout);
+	}
+	return (0);
 }

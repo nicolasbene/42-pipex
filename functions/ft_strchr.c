@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/28 11:43:25 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/28 17:01:35 by nibenoit         ###   ########.fr       */
+/*   Created: 2022/11/09 11:32:06 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/02/28 10:37:48 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex_bonus.h"
+#include "../includes/pipex.h"
 
-void	ft_free_tab(char **tab)
+char	*ft_strchr(const char *str, int c)
 {
-	int	i;
-
-	i = 0;
-	while (tab[i])
+	while (*str)
 	{
-		free(tab[i]);
-		i++;
+		if (*str == (unsigned char)c)
+			return ((char *)str);
+		str++;
 	}
-	free(tab);
-}
-
-void	ft_free_cmd_error(char **cmd_paths, char **cmd_tab)
-{
-	ft_free_tab(cmd_paths);
-	ft_free_tab(cmd_tab);
+	if ((unsigned char)c == 0)
+		return ((char *)str);
+	return (NULL);
 }

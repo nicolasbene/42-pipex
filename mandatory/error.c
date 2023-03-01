@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   error_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/15 14:33:32 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/21 15:57:30 by nibenoit         ###   ########.fr       */
+/*   Created: 2023/02/20 15:57:16 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/03/01 12:20:45 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-int	msg(char *err)
+void	arg_error(void)
 {
-	write(2, err, ft_strlen(err));
-	return (1);
+	ft_putstr_fd("Invalid arguments", 2);
+	exit(EXIT_SUCCESS);
 }
 
-void	msg_error(char *err, t_pipex *pipex)
+void	msg_error(void)
 {
-	free(pipex);
-	perror(err);
-	exit (1);
+	perror("Error");
+	exit(EXIT_FAILURE);
 }

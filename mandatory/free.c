@@ -1,50 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   free_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nibenoit <nibenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 17:43:06 by nibenoit          #+#    #+#             */
-/*   Updated: 2023/02/21 15:57:35 by nibenoit         ###   ########.fr       */
+/*   Created: 2023/02/28 11:43:25 by nibenoit          #+#    #+#             */
+/*   Updated: 2023/03/01 12:21:02 by nibenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	free_parent(t_pipex *pipex)
+void	ft_free_tab(char **tab)
 {
 	int	i;
 
 	i = 0;
-	close(pipex->infile);
-	close(pipex->outfile);
-	while (pipex->cmd_paths[i])
+	while (tab[i])
 	{
-		free(pipex->cmd_paths[i]);
+		free(tab[i]);
 		i++;
 	}
-	free(pipex->cmd_paths);
+	free(tab);
 }
 
-void	free_child(t_pipex *pipex)
+void	ft_free_cmd_error(char **cmd_paths, char **cmd_tab)
 {
-	int	i;
-
-	i = 0;
-	while (pipex->cmd_arg_str[i])
-	{
-		free(pipex->cmd_arg_str[i]);
-		i++;
-	}
-	free(pipex->cmd_arg_str);
-	free(pipex->cmd_str);
-	free_parent(pipex);
-}
-
-void	free_error_cmd(t_pipex *pipex)
-{
-	free_child(pipex);
-	msg_error(ERR_CMD, pipex);
-	exit(1);
+	ft_free_tab(cmd_paths);
+	ft_free_tab(cmd_tab);
 }
